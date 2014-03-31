@@ -1,0 +1,101 @@
+mixin medit-legend(kind, el)
+  legend
+    <%= el ? 'Edition' : 'Nouvelle' %>
+    != ' ' + kind
+
+mixin medit-footer(el)
+  hr
+  a.btn.btn-default(href='javascript:history.back()') Cancel
+  button.btn.btn-success(type='submit')
+    <%= el ? 'Modifier' : 'Créer' %>
+  <% if(el) { %>
+  input(type='hidden', name='id', value!='<%= el.id %>')
+  button.btn.btn-danger.delete Supprimer
+  <% }; %>
+
+doctype html
+html(lang='fr')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='description', content='apprentissage de html/css/javascript/node/express/jade/backbone')
+    meta(name='author', content='Jef')
+    title= title
+    link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css')
+    //[if lt IE 9]
+      script(src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js')
+    link(rel='stylesheet', href='voiture.css')
+  body
+    .container-fluid
+      .row-fluid
+        h1= title
+        .span12
+          .page
+
+    script#depense-list-template(type='text/template', style='display: none')
+      a.btn.btn-primary(href='#/new') Créer
+      hr
+      table.table.table-striped.table-hover.table-condensed#list_local_storage
+        tr
+          th Date
+          th Kilométrage
+          th Volume
+          th Prix
+          th Station
+        <% _.each(l, function(el) { %>
+        tr
+          td
+            a(href!='#/edit/<%= el.id %>') <%= el.escape('date') %>
+          td <%= htmlEncode(el.get('km')) %>
+          td <%= htmlEncode(el.get('volume')) %>
+          td <%= htmlEncode(el.get('prix')) %>
+          td <%= htmlEncode(el.get('station')) %>
+        <% }); %>
+
+    script#edit-depense-template(type='text/template', style='display: none')
+      form.edit-depense-form.form-horizontal(role='form')
+        +medit-legend('dépense de carburant', el)
+        .form-group
+          label.col-sm-2.control-label(for='f1date') Date
+          .col-sm-10
+            input.form-control#f1date(type='date', name='date', value!='<%= el ? el.get(\'date\') : (new Date()).toISOString().substring(0, 10) %>')
+        .form-group
+          label.col-sm-2.control-label(for='f1volume') Volume
+          .col-sm-10
+            .input-group
+              span.input-group-addon &nbsp;l&nbsp;
+              input.form-control#f1volume(type='text', name='volume', value!='<%= el ? el.get(\'volume\') : \'\' %>')
+        .form-group
+          label.col-sm-2.control-label(for='f1prix') Prix
+          .col-sm-10
+            .input-group
+              span.input-group-addon &nbsp;€&nbsp;
+              input.form-control#f1prix(type='text', name='prix', value!='<%= el ? el.get(\'prix\') : \'\' %>')
+        .form-group
+          label.col-sm-2.control-label(for='f1km') Kilométrage
+          .col-sm-10
+            .input-group
+              span.input-group-addon km
+              input.form-control#f1km(type='text', name='km', value!='<%= el ? el.get(\'km\') : \'\' %>')
+        .form-group
+          label.col-sm-2.control-label(for='f1station') Station
+          .col-sm-10
+            .input-group
+              .input-group-btn
+                button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown') Favoris
+                ul.dropdown-menu(role='menu')
+                  li
+                    a#action_favoris(href='#') <%= el ? ((findStation(el.get("station")) == -1) ? 'Ajouter' : 'Supprimer') : 'Ajouter' %>
+                  li.divider#div_favoris
+                  <% _.each(v, function (ver) { %>
+                  li
+                    a.station(href='#') <%= ver %>
+                  <% }); %>
+              input.form-control#f1station(type='text', name='station', value!='<%= el ? el.get(\'station\') : \'\' %>')
+        +medit-footer(el)
+
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js')
+    script(src='//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js')
+    script(src='voiture.js')

@@ -1,0 +1,27 @@
+{
+  "name": "voiture",
+  "version": "0.0.7",
+  "description": "Gestion des dépenses pour les voitures",
+  "main": "app.js",
+  "scripts": {
+    "test": "tu_voiture"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:e70838/voiture.git"
+  },
+  "author": "Jean-François Bocquet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/e70838/voiture/issues"
+  },
+  "homepage": "https://github.com/e70838/voiture",
+  "dependencies": {
+    "nib": "^1.0.2",
+    "stylus": "^0.42.3",
+    "jade": "^1.3.0",
+    "express": "^3.4.8",
+    "pg": "^2.11.1",
+    "light-orm": "^0.1.4"
+  }
+}
